@@ -1,3 +1,6 @@
+import pickle
+from pathlib import Path
+
 class Contact:
 	def __init__(self, name, email, address, telephone):
 		self.name = name
@@ -6,8 +9,6 @@ class Contact:
 		self.telephone = telephone
 
 class ContactManager:
-	def __init__(self, contacts):
-		self.contacts = contacts
 
 	def showAllContacts(self):
 		print('\n----------------------------------All of the contacts----------------------------------')
@@ -61,6 +62,39 @@ class ContactManager:
 			print('\nThere are no contacts in the address book.Please add some first...')
 			return True
 		return False
+
+	def loadContacts(self):
+		print('\nStart to load contacts from {}...'.format(ContactLoader.contactspath))
+		cl = ContactLoader()
+		self.contacts = cl.loadContacts()
+		print('Finished!')
+
+	def dumpContacts(self):
+		print('\nDump data to {}...'.format(ContactLoader.contactspath))
+		cd = ContactDumper()
+		cd.dumpContacts(self.contacts)
+		print('Finished!')
+
+class ContactLoader:
+
+	contactspath = 'contacts.data'
+
+	def loadContacts(self):
+		f = Path(ContactLoader.contactspath)
+		if f.exists():
+			contacts = pickle.load(open(f, 'rb'))
+			return contacts
+		else:
+			return []
+
+class ContactDumper:
+
+	contactspath = ContactLoader.contactspath
+
+	def dumpContacts(self, contacts):
+		f = open(ContactLoader.contactspath, 'wb')
+		pickle.dump(contacts, f)
+		f.close()
 
 class NotEnoughInfoException(Exception):
 	pass

@@ -2,9 +2,6 @@ from cls import ContactManager
 from cls import NotEnoughInfoException
 import time
 
-contacts = []
-cm = ContactManager(contacts)
-
 choices = {
 	1 : 'View the address book',
 	2 : 'Add a contact',
@@ -13,7 +10,13 @@ choices = {
 	5 : 'search in address book',
 	6 : 'Quit'
 }
-print('\nWelcome! Choose a number to use this program!')
+
+
+
+print('\nWelcome! ')
+cm = ContactManager()
+cm.loadContacts()
+print('\nChoose a number to use this program!')
 
 while True:
 	print('\n-----------------------------------------Menu------------------------------------------')
@@ -73,6 +76,7 @@ while True:
 		continue
 
 	if no == 6:
+		cm.dumpContacts()
 		print('\nExit now...')
 		break
 	print('\nPlease make an another choice')
